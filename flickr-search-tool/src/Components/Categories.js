@@ -1,21 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-const Categories = () => {
-    return(
+import { Link, NavLink, Redirect, Route, Routes } from 'react-router-dom';
+import Search from './Search'
+import PhotosList from './PhotosList';
+
+const Categories = () => (
+
         <nav className="main-nav">
           <ul>
             <li>
-              <Link to="/pyramids">Pyramids</Link>
+              <NavLink to="/pyramids">Pyramids</NavLink>
             </li>
             <li>
-              <Link to="/nature">Nature</Link>
+              <NavLink to="/nature">Nature</NavLink>
             </li>
             <li>
-              <Link to="/gorillas">Gorillas</Link>
+            <NavLink to="/bears">Bears</NavLink>
             </li>
           </ul>
         </nav>
     );
-}
 
 export default Categories;
