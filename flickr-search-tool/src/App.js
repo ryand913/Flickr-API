@@ -4,7 +4,6 @@ import {
   BrowserRouter,
   Switch,
   Route
-  
 } from "react-router-dom";
 import Search from './Components/Search';
 import Notfound from './Components/Notfound';
@@ -20,7 +19,8 @@ export default class App extends Component {
       pics: [],
       bearpics:[],
       pyramidpics:[],
-      naturepics:[]
+      naturepics:[],
+      searchItem: []
     };
   } 
   componentDidMount() {
@@ -31,21 +31,26 @@ export default class App extends Component {
   }
 
 
-  flickrCall = (search) => {
+
+  flickrCall = (search = 'pyramids') => {
     fetch(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${search}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => response.json())
       .then(responseData => {
-        if(search === 'bears'){
-          this.setState({bearpics: responseData.photos.photo});
-        }
-        else if (search === 'pyramids'){
+        if(search === 'pyramids'){
           this.setState({pyramidpics: responseData.photos.photo});
+          this.setState({searchItem: "pyramids"});
         }
-        else if(search === 'nature'){
+        else if (search === 'nature'){
           this.setState({naturepics: responseData.photos.photo});
+          this.setState({searchItem: "nature"});
+        }
+        else if(search === 'bears'){
+          this.setState({bearpics: responseData.photos.photo});
+          this.setState({searchItem: "bears"});
         }
         else{
         this.setState({ pics: responseData.photos.photo });
+        this.setState({searchItem: search})
         }
       })
       .catch(error => {
@@ -59,12 +64,12 @@ render(){
       <Search onSearch={this.flickrCall} />
       <Categories />
         <Switch>
-          <Route exact path="/" render= {() => <PhotosList flickrpics={this.state.pics} />} />
-          <Route path="/:search" render= {() => <PhotosList flickrpics={this.state.pics} search={this.state.search}/>} />
+          <Route exact path="/" render= {() => <PhotosList flickrpics={this.state.pics} searchEntry={this.state.searchItem} />} />
+          <Route exact path="/pyramids" render={() => <PhotosList flickrpics={this.state.pyramidpics} searchEntry={this.state.searchItem} />} />         
+          <Route exact path="/nature" render={() => <PhotosList flickrpics={this.state.naturepics} searchEntry={this.state.searchItem} />} /> 
+          <Route exact path="/bears" render={() => <PhotosList flickrpics={this.state.bearpics} searchEntry={this.state.searchItem} /> } /> 
+          <Route path="/:search" render= {() => <PhotosList flickrpics={this.state.pics} searchEntry={this.state.searchItem} />} />
           <Route path="*" render={() => <Notfound />} />
-          <Route exact path='/pyramids' render={() => <PhotosList flickrpics={this.state.pyramidpics} />} />         
-          <Route exact path='/nature' render={() => <PhotosList flickrpics={this.state.naturepics} />} /> 
-          <Route exact path='/bears' render={() => <PhotosList flickrpics={this.state.bearpics} /> } /> 
         </Switch>
       </div>
     </BrowserRouter>

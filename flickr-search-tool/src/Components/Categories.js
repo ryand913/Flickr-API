@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link, NavLink, Redirect, Route, Routes } from 'react-router-dom';
-import Search from './Search'
-import PhotosList from './PhotosList';
+import { NavLink} from 'react-router-dom';
+
 
 const Categories = () => (
 

@@ -7,18 +7,28 @@ class Search extends Component  {
     searchQuery: ''
   }
 
+
+  componentDidUpdate(prevProps){ 
+    let loadedpath = this.state.searchItem;
+    let previouspath = prevProps.location.pathname.split("/");
+    console.log(previouspath);
+    if(loadedpath){
+    if(loadedpath !== previouspath){
+      this.onSearch(previouspath);
+    }
+  }
+    }
+ 
   
   onSearchChange = e => {
-    this.setState({ search: e.target.value });
+    this.setState({ searchQuery: e.target.value });
   }
-
 
 
   handleSubmit = e => {
     let searchValue = `/${this.state.searchQuery}`
     e.preventDefault();
-    this.props.onSearch(this.state.search);
-    console.log(searchValue);
+    this.props.onSearch(this.state.searchQuery);
     this.props.history.push(searchValue);
     e.currentTarget.reset();
 
@@ -27,7 +37,6 @@ class Search extends Component  {
 
 
   render(){
-
     return (
 <form className="search-form"  onSubmit={this.handleSubmit}>
   <input type="search" onChange={this.onSearchChange} name="search" placeholder="Search" required="" />
@@ -50,5 +59,5 @@ class Search extends Component  {
   }
     }
 
-    export default Search;
+    export default withRouter(Search);
 
