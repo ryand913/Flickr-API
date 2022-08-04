@@ -9,12 +9,12 @@ class Search extends Component  {
 
 
   componentDidUpdate(prevProps){ 
-    let loadedpath = this.state.searchItem;
+    let loadedpath = this.props.location.pathname;
     let previouspath = prevProps.location.pathname.split("/");
-    console.log(previouspath);
+    console.log(loadedpath);
     if(loadedpath){
     if(loadedpath !== previouspath){
-      this.onSearch(previouspath);
+      this.props.onSearch(previouspath);
     }
   }
     }
