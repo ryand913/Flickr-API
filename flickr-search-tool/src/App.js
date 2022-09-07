@@ -22,7 +22,6 @@ braze.openSession();
 
 
 
-
 const GUID = Math.random() * 9000
 braze.changeUser(GUID.toString());
 
@@ -71,12 +70,10 @@ export default class App extends Component {
         }
         else{
         this.setState({ pics: responseData.photos.photo, searchItem: search, loading: false});
-        braze.getUser().setCustomUserAttribute(
-          "whatDidUserSearch",
+        braze.getUser().addToCustomAttributeArray(
+          "whatDidUserSearchArray",
           `${search}`
-          
         );
-
         braze.logCustomEvent("clicked-the-search-button");
 
         // this.setState({searchItem: search})
