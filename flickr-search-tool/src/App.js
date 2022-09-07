@@ -12,6 +12,21 @@ import PhotosList from './Components/PhotosList';
 import Categories from './Components/Categories';
 import LoadingPage from './Components/LoadingPage'
 
+const braze = require("@braze/web-sdk");
+
+braze.initialize('5f2e3faa-be09-4763-9dd2-5973c63d0272', {
+  baseUrl: "sondheim.braze.com"
+});
+
+braze.openSession();
+
+
+
+
+const GUID = Math.random() * 9000
+braze.changeUser(GUID.toString());
+
+
 export default class App extends Component {
   constructor() {
     super();
@@ -30,7 +45,10 @@ export default class App extends Component {
     this.flickrCall('bears');
     this.flickrCall('nature');
     this.flickrCall('pyramids');
+
   }
+
+
 
 
 //use logic to set state based on a free search versus clicking the nav bar
@@ -53,6 +71,14 @@ export default class App extends Component {
         }
         else{
         this.setState({ pics: responseData.photos.photo, searchItem: search, loading: false});
+        braze.getUser().setCustomUserAttribute(
+          "whatDidUserSearch",
+          `${search}`
+          
+        );
+
+        braze.logCustomEvent("clicked-the-search-button");
+
         // this.setState({searchItem: search})
         }
       })
@@ -63,6 +89,7 @@ export default class App extends Component {
   
 //establish routes, dynamic routing and not found page
 render(){
+
   return (
     <BrowserRouter>
       <div className="container">
@@ -86,4 +113,9 @@ render(){
   );
 }
 }
+
+// const button = document.querySelector(".search-button")
+// button.addEventListener("click", () => {
+//   braze.requestPushPermission()
+// });
 
